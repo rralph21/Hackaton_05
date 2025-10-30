@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="styles.css" />
-		<title></title>
-	</head>
-	<body>
-		<div id="trading">
-            <h1> Trading </h1>
-			<label for="Stocks"> Stocks</label>
-			<select id="Stocks">
-                <option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-			</select>
-			<button onclick="displayStockList()">Get Stocks(s)</button>
-			<div id="stockContainer"></div>
-		</div>
-		<script src="script.js"></script>
-	</body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="styles.css" />
+  <title>Trading</title>
+</head>
+<body>
+  <form id="priceForm">
+    <h1>Trading</h1>
+
+    <label for="pair">Stocks</label>
+    <select id="pair">
+      <option value="" disabled selected>Select one</option>
+      <option value="BTC-USD">BTC-USD</option>
+      <option value="ETH-USD">ETH-USD</option>
+      <option value="LTC-USD">LTC-USD</option>
+      <option value="SOL-USD">SOL-USD</option>
+      <option value="ADA-USD">ADA-USD</option>
+    </select>
+
+    <div id="priceOutput" aria-live="polite"></div>
+  </form>
+
+  <script src="script.js"></script>
+</body>
 </html>
