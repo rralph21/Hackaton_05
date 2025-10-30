@@ -1,21 +1,10 @@
 function showPromiseExample() {
   console.log("Start of code");
-  const myPromise = new Promise((resolve) => {
-    setTimeout(() => resolve("Promise has finished!"), 2000);
-  });
-  myPromise.then((msg) => console.log(msg));
+  new Promise(resolve => setTimeout(() => resolve("Promise has finished!"), 1500))
+    .then(msg => console.log(msg));
   console.log("This line runs right after starting the promise!");
 }
 showPromiseExample();
-
-const PAIRS = [
-  "BTC-USD", "ETH-USD", "LTC-USD", "SOL-USD", "ADA-USD"
-];
-
-function getSelectedCount() {
-  const sel = document.getElementById("Stocks");
-  return Number(sel.value) || 1;
-}
 
 async function fetchSpot(pair) {
   const url = `https://api.coinbase.com/v2/prices/${pair}/spot`;
@@ -25,41 +14,31 @@ async function fetchSpot(pair) {
   return data;
 }
 
-function fmtAmount(amountStr) {
+function formatAmount(amountStr) {
   const n = Number(amountStr);
-  return Number.isFinite(n) ? n.toLocaleString(undefined, { maximumFractionDigits: 8 }) : amountStr;
+  return Number.isFinite(n)
+    ? n.toLocaleString(undefined, { maximumFractionDigits: 8 })
+    : amountStr;
 }
 
-function renderPrices(container, rows) {
-  container.innerHTML = "";
-  rows.forEach(({ base, currency, amount }) => {
-    const card = document.createElement("div");
-    card.className = "price-card";
-    card.innerHTML = `
-      <div class="pair">${base} <span class="sep">/</span> ${currency}</div>
-      <div class="price">${fmtAmount(amount)}</div>
-    `;
-    container.appendChild(card);
-  });
-}
+const pairSelect = document.getElementById("pair");
+const priceOutput = document.getElementById("priceOutput");
 
-async function displayStockList() {
-  const count = getSelectedCount();
-  const container = document.getElementById("stockContainer");
+document.getElementById("priceForm").addEventListener("submit", (e) => e.preventDefault());
 
-  container.textContent = "Loading prices...";
+pairSelect.addEventListener("change", async () => {
+  const pair = pairSelect.value;
+  if (!pair) return;
+
+  priceOutput.textContent = "Loading price...";
+
   try {
-    const targets = PAIRS.slice(0, count);
-    const results = await Promise.all(
-      targets.map(pair => fetchSpot(pair))
-    );
-    renderPrices(container, results);
+    const { base, currency, amount } = await fetchSpot(pair);
+    priceOutput.innerHTML = `
+      <strong>${base}/${currency}</strong> spot: ${formatAmount(amount)}
+    `;
   } catch (err) {
     console.error(err);
-    container.textContent = "Sorry, something went wrong while fetching prices.";
+    priceOutput.textContent = "Sorry, could not load price.";
   }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  displayStockList();
 });

@@ -31,3 +31,8 @@ textarea {
 	border-radius: 0.25em;
 }
 
+#priceOutput { 
+  font-weight: 600; 
+  margin-top: 0.5em; 
+}
+
